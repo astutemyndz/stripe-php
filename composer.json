@@ -24,7 +24,7 @@
       },
       "autoload": {
         "psr-4": { 
-            "Stripe\\" : "vendor/stripe/lib/",
+            "Stripe\\" : "vendor/stripe/",
             "Illuminate\\": "src/Illuminate/"
         }
       }

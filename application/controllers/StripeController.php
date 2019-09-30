@@ -29,7 +29,7 @@ class StripeController extends CI_Controller {
     }
     
     public function init() {
-        Stripe::setApiKey("sk_test_o5nGXpdRlws3GgpwcOgxzRaP");
+        Stripe::setApiKey("sk_test_Ig6WtZMFqTGXRARNj4bWKdr200pBTIKQyI");
         Stripe::setVerifySslCerts(false);
 
     }
@@ -42,8 +42,8 @@ class StripeController extends CI_Controller {
      * @url v1/payment_intents/list
      * @method GET
      */
- 
-    public function list() {
+  
+    public function paymentIntents() {
         try {
             $this->setIntent(PaymentIntent::all(["limit" => 3]));
             $this->setResponse(new Response(
@@ -135,16 +135,20 @@ class StripeController extends CI_Controller {
             "message": "OK"
         }
      */
+
     public function create() {
         try {
             $this->setIntent(PaymentIntent::create([
-                'amount' => 2000,
-                'currency' => 'usd',
+                'amount' => ($this->input->post('amount')) ? $this->input->post('amount') : '',
+                'currency' => ($this->input->post('currency')) ? $this->input->post('currency') : '',
+                'description' => ($this->input->post('description')) ? $this->input->post('description') : '',
                 'payment_method_types' => ['card'],
+                'payment_method' => ($this->input->post('paymentMethodId')) ? $this->input->post('paymentMethodId') : '',
               ]));
+            
             $this->setResponse(new Response(
                 array(
-                    'data' => $this->intent,
+                    'client_secret' => $this->intent->client_secret,
                     'status' => Response::HTTP_OK,
                     'message' => Response::$statusTexts[200]
                 ),
@@ -154,7 +158,7 @@ class StripeController extends CI_Controller {
         } catch(\Exception $ex) {
             $this->setResponse(new Response(
                 array(
-                    'data' => [],
+                    'client_secret' => '',
                     'status' => Response::HTTP_OK,
                     'message' => $ex->getMessage()
                 ),
@@ -162,8 +166,6 @@ class StripeController extends CI_Controller {
                 ['Content-Type', 'application/json']
             ));
         }
-        
-        
         $this->sendResponse();
     }
     /**
@@ -263,4 +265,5 @@ class StripeController extends CI_Controller {
         
         $this->sendResponse();
     }
+    
 }

@@ -6,6 +6,6 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-$route['v1/payment_intents/list'] = 'StripeController/list';
+$route['v1/payment_intents/list'] = 'StripeController/paymentIntents';
 $route['v1/payment_intents/create'] = 'StripeController/create';
 $route['v1/payment_intents/get'] = 'StripeController/get';
